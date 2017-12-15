@@ -211,6 +211,15 @@ extension AppDelegate:UNUserNotificationCenterDelegate
 {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void)
     {
+        if
+            let typeString = response.notification.request.content.userInfo["notificationType"] as? String,
+            let notificationType = NotificationType(rawValue: typeString),
+            notificationType == .goal,
+            let tabBarController = window?.rootViewController?.presentedViewController as? UITabBarController
+        {
+            tabBarController.selectedIndex = 1
+        }
+        
         dailyVotingNotificationDate = dailyVotingDate(response.notification)
         completionHandler()
     }
